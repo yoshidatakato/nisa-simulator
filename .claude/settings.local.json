@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(/opt/homebrew/bin/npm install:*)",
+      "Bash(pkill -9 -f \"vite\")",
+      "Bash(ls /Users/yoshidatakato/Desktop/ | grep -i 資産 2>/dev/null; echo \"---\"; lsof -p 38632 | grep cwd)",
+      "Bash(kill 38632)",
+      "Bash(cp /Users/yoshidatakato/資産管理アプリ/src/utils/simulation.js /Users/yoshidatakato/Desktop/資産管理アプリ/src/utils/simulation.js)",
+      "Bash(cp /Users/yoshidatakato/資産管理アプリ/src/App.jsx /Users/yoshidatakato/Desktop/資産管理アプリ/src/App.jsx)",
+      "Bash(cp /Users/yoshidatakato/資産管理アプリ/src/App.css /Users/yoshidatakato/Desktop/資産管理アプリ/src/App.css)",
+      "Bash(cp /Users/yoshidatakato/資産管理アプリ/src/components/AssetChart.jsx /Users/yoshidatakato/Desktop/資産管理アプリ/src/components/AssetChart.jsx)",
+      "Bash(cp /Users/yoshidatakato/資産管理アプリ/src/components/NisaPanel.jsx /Users/yoshidatakato/Desktop/資産管理アプリ/src/components/NisaPanel.jsx)",
+      "Bash(kill 47497)",
+      "Bash(awk '{print $2}')",
+      "Bash(xargs -I{} lsof -p {})",
+      "Bash(cp /Users/yoshidatakato/資産管理アプリ/src/components/InputPanel.jsx /Users/yoshidatakato/Desktop/資産管理アプリ/src/components/InputPanel.jsx)",
+      "Bash(pkill -f \"Desktop.*vite\")",
+      "Bash(cp /Users/yoshidatakato/資産管理アプリ/src/components/LifePlanTable.jsx /Users/yoshidatakato/Desktop/資産管理アプリ/src/components/LifePlanTable.jsx)",
+      "Bash(npx --yes vite build --mode development)",
+      "Bash(mkdir -p /Users/yoshidatakato/資産管理アプリ/src/hooks && mkdir -p /Users/yoshidatakato/Desktop/資産管理アプリ/src/hooks)",
+      "Bash(npx vite *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
