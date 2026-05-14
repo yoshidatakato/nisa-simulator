@@ -36,6 +36,13 @@ const DEFAULT_INPUTS = {
 const MIN_CHART_H = 150;
 const DEFAULT_CHART_H = 400;
 
+const TABS = [
+  { id: 'home',  label: 'ホーム',  icon: '🏠' },
+  { id: 'input', label: '入力',    icon: '✏️'  },
+  { id: 'chart', label: 'グラフ',  icon: '📈' },
+  { id: 'table', label: '表',      icon: '📋' },
+];
+
 export default function App() {
   const [inputs, setInputs] = useLocalStorage('lp3_inputs', DEFAULT_INPUTS);
   const set = (key, val) => setInputs((p) => ({ ...p, [key]: val }));
@@ -46,14 +53,12 @@ export default function App() {
   );
 
   const [chartHeight, setChartHeight] = useState(DEFAULT_CHART_H);
+  const [mobileTab, setMobileTab] = useState('home');
 
   const startDrag = (clientY) => {
     const startY = clientY;
     const startH = chartHeight;
-
-    const onMove = (y) => {
-      setChartHeight(Math.max(MIN_CHART_H, startH + (y - startY)));
-    };
+    const onMove = (y) => setChartHeight(Math.max(MIN_CHART_H, startH + (y - startY)));
     const onMouseMove = (e) => onMove(e.clientY);
     const onTouchMove = (e) => { e.preventDefault(); onMove(e.touches[0].clientY); };
     const cleanup = () => {
@@ -68,38 +73,65 @@ export default function App() {
     window.addEventListener('touchend',  cleanup);
   };
 
+  // モバイルタブの表示制御（PCでは常に表示）
+  const hide = (tab) => `mobile-hide-${tab}`;
+
   return (
     <div className="app">
-      <div className="app-layout">
-        <aside className="sidebar">
+      <div className="app-layout" data-tab={mobileTab}>
+        {/* サイドバー：PC常時表示 / モバイルは「入力」タブのみ */}
+        <aside className={`sidebar ${hide('non-input')}`}>
           <InputPanel inputs={inputs} set={set} />
         </aside>
-        <main className="main-area">
-          <AssetChart
-            data={data}
-            currentAge={inputs.currentAge}
-            spouseAge={inputs.spouseAge}
-            fireAge={inputs.fireAge}
-            selfFullAge={selfFullAge}
-            spouseFullAge={spouseFullAge}
-            childFullAge={childFullAge}
-            chartHeight={chartHeight}
-          />
-          <div
-            className="resize-divider"
-            onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
-            onTouchStart={(e) => startDrag(e.touches[0].clientY)}
-          />
-          <AssetTable
-            data={data}
-            currentAge={inputs.currentAge}
-            spouseAge={inputs.spouseAge}
-            selfFullAge={selfFullAge}
-            spouseFullAge={spouseFullAge}
-            childFullAge={childFullAge}
-          />
+
+        {/* メインエリア：PC常時表示 / モバイルは「ホーム」「グラフ」「表」タブ */}
+        <main className={`main-area ${hide('input')}`}>
+          {/* グラフ：ホーム・グラフタブで表示 */}
+          <div className={hide('table')}>
+            <AssetChart
+              data={data}
+              currentAge={inputs.currentAge}
+              spouseAge={inputs.spouseAge}
+              fireAge={inputs.fireAge}
+              selfFullAge={selfFullAge}
+              spouseFullAge={spouseFullAge}
+              childFullAge={childFullAge}
+              chartHeight={chartHeight}
+            />
+            <div
+              className="resize-divider"
+              onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
+              onTouchStart={(e) => startDrag(e.touches[0].clientY)}
+            />
+          </div>
+
+          {/* 表：ホーム・表タブで表示 */}
+          <div className={hide('chart')}>
+            <AssetTable
+              data={data}
+              currentAge={inputs.currentAge}
+              spouseAge={inputs.spouseAge}
+              selfFullAge={selfFullAge}
+              spouseFullAge={spouseFullAge}
+              childFullAge={childFullAge}
+            />
+          </div>
         </main>
       </div>
+
+      {/* モバイル専用タブナビゲーション */}
+      <nav className="tab-nav">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            className={`tab-btn ${mobileTab === t.id ? 'tab-btn--active' : ''}`}
+            onClick={() => setMobileTab(t.id)}
+          >
+            <span className="tab-icon">{t.icon}</span>
+            <span className="tab-label">{t.label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }

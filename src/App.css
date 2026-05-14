@@ -446,6 +446,11 @@ body {
   width: 64px;
 }
 
+/* ===== モバイルタブナビゲーション ===== */
+.tab-nav {
+  display: none; /* PCでは非表示 */
+}
+
 /* ===== レスポンシブ ===== */
 @media (max-width: 860px) {
   .app-layout { flex-direction: column; overflow: visible; }
@@ -458,4 +463,65 @@ body {
   }
   .main-area { height: auto; overflow: visible; }
   .app { height: auto; min-height: 100vh; }
+}
+
+@media (max-width: 768px) {
+  /* タブバー表示 */
+  .tab-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    z-index: 100;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
+  }
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0;
+    transition: color var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab-btn--active {
+    color: var(--accent-blue);
+  }
+  .tab-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  .tab-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* コンテンツがタブバーに隠れないよう余白 */
+  .app { padding-bottom: 60px; }
+
+  /* タブ切り替えの表示制御 */
+  /* ホームタブ：グラフ＋表（サイドバー非表示） */
+  [data-tab="home"] .mobile-hide-non-input { display: none !important; }
+
+  /* 入力タブ：サイドバーのみ（メインエリア非表示） */
+  [data-tab="input"] .mobile-hide-input { display: none !important; }
+
+  /* グラフタブ：グラフのみ（サイドバー・表非表示） */
+  [data-tab="chart"] .mobile-hide-non-input { display: none !important; }
+  [data-tab="chart"] .mobile-hide-table    { display: none !important; }
+
+  /* 表タブ：表のみ（サイドバー・グラフ非表示） */
+  [data-tab="table"] .mobile-hide-non-input { display: none !important; }
+  [data-tab="table"] .mobile-hide-chart     { display: none !important; }
 }
