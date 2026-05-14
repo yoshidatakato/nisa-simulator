@@ -40,11 +40,43 @@ const DEFAULT_INPUTS = {
 const MIN_CHART_H = 150;
 const DEFAULT_CHART_H = 400;
 
+const IconHome  = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 12L12 3l9 9" />
+    <path d="M9 21V12h6v9" />
+    <path d="M4 12v9h16v-9" />
+  </svg>
+);
+const IconInput = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="3" />
+    <line x1="8" y1="9"  x2="16" y2="9"  />
+    <line x1="8" y1="13" x2="16" y2="13" />
+    <line x1="8" y1="17" x2="12" y2="17" />
+  </svg>
+);
+const IconChart = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3"  y="12" width="4" height="9" rx="1" />
+    <rect x="10" y="7"  width="4" height="14" rx="1" />
+    <rect x="17" y="3"  width="4" height="18" rx="1" />
+  </svg>
+);
+const IconTable = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <line x1="3"  y1="9"  x2="21" y2="9"  />
+    <line x1="3"  y1="15" x2="21" y2="15" />
+    <line x1="9"  y1="9"  x2="9"  y2="21" />
+    <line x1="15" y1="9"  x2="15" y2="21" />
+  </svg>
+);
+
 const TABS = [
-  { id: 'home',  label: 'ホーム',  icon: '🏠' },
-  { id: 'input', label: '入力',    icon: '✏️'  },
-  { id: 'chart', label: 'グラフ',  icon: '📈' },
-  { id: 'table', label: '表',      icon: '📋' },
+  { id: 'home',  label: 'ホーム',  Icon: IconHome  },
+  { id: 'input', label: '入力',    Icon: IconInput },
+  { id: 'chart', label: 'グラフ',  Icon: IconChart },
+  { id: 'table', label: '表',      Icon: IconTable },
 ];
 
 export default function App() {
@@ -147,14 +179,14 @@ export default function App() {
 
       {/* モバイル専用タブナビゲーション */}
       <nav className="tab-nav">
-        {TABS.map((t) => (
+        {TABS.map(({ id, label, Icon }) => (
           <button
-            key={t.id}
-            className={`tab-btn ${mobileTab === t.id ? 'tab-btn--active' : ''}`}
-            onClick={() => setMobileTab(t.id)}
+            key={id}
+            className={`tab-btn ${mobileTab === id ? 'tab-btn--active' : ''}`}
+            onClick={() => setMobileTab(id)}
           >
-            <span className="tab-icon">{t.icon}</span>
-            <span className="tab-label">{t.label}</span>
+            <span className="tab-icon"><Icon /></span>
+            <span className="tab-label">{label}</span>
           </button>
         ))}
       </nav>

@@ -513,10 +513,14 @@ body {
   }
   .tab-btn--active .tab-icon { transform: scale(1.15); }
   .tab-icon {
-    font-size: 1.3rem;
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.2s ease;
-    display: block;
+  }
+  .tab-icon svg {
+    width: 22px;
+    height: 22px;
   }
   .tab-label {
     font-size: 0.6rem;

@@ -50,17 +50,13 @@ export default function MobileChartPanel({
           <div className="mcp-bd-total">{formatMan(row.total)}円</div>
         </div>
         <div className="mcp-bd-grid">
-          {ITEMS.map(({ key, label, color }) => {
-            const val = row[key] ?? 0;
-            if (val === 0 && key !== 'cash') return null;
-            return (
-              <div key={key} className="mcp-bd-item">
-                <span className="mcp-bd-dot" style={{ background: color }} />
-                <span className="mcp-bd-label">{label}</span>
-                <span className="mcp-bd-val">{formatMan(val)}円</span>
-              </div>
-            );
-          })}
+          {ITEMS.map(({ key, label, color }) => (
+            <div key={key} className="mcp-bd-item">
+              <span className="mcp-bd-dot" style={{ background: color }} />
+              <span className="mcp-bd-label">{label}</span>
+              <span className="mcp-bd-val">{formatMan(row[key] ?? 0)}円</span>
+            </div>
+          ))}
         </div>
       </div>
 
