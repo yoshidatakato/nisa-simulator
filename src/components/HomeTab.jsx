@@ -1,9 +1,34 @@
 import React from 'react';
-import { formatMan } from '../utils/simulation';
+import { formatMan, NISA_CAP, NISA_CAP_CHILD } from '../utils/simulation';
 
 const THIS_YEAR = new Date().getFullYear();
 
-export default function HomeTab({ data, inputs }) {
+function NisaBar({ label, color, current, cap, fullAge, currentAge }) {
+  const pct = cap > 0 ? Math.min(100, (current / cap) * 100) : 0;
+  const year = fullAge != null ? THIS_YEAR + (fullAge - currentAge) : null;
+  return (
+    <div className="ht-nisa-row">
+      <div className="ht-nisa-head">
+        <span className="ht-nisa-label" style={{ color }}>{label}</span>
+        <span className="ht-nisa-nums">
+          {formatMan(current)}
+          <span className="ht-nisa-cap">／{formatMan(cap)}円</span>
+        </span>
+      </div>
+      <div className="ht-nisa-track">
+        <div className="ht-nisa-fill" style={{ width: `${pct}%`, background: color }} />
+      </div>
+      <div className="ht-nisa-status">
+        <span className="ht-nisa-pct">{Math.round(pct)}%</span>
+        {fullAge != null
+          ? <span className="ht-nisa-full" style={{ color }}>✓ {fullAge}歳達成（{year}年）</span>
+          : <span className="ht-nisa-unfull">未到達</span>}
+      </div>
+    </div>
+  );
+}
+
+export default function HomeTab({ data, inputs, selfFullAge, spouseFullAge, childFullAge }) {
   const current = data?.[0] || {};
   const total   = current.total || 0;
   const cash    = current.cash  || 0;
@@ -98,6 +123,44 @@ export default function HomeTab({ data, inputs }) {
           )}
         </div>
       )}
+
+      {/* ── NISA満額進捗 ── */}
+      <div className="ht-card">
+        <div className="ht-card-header">
+          <span className="ht-card-icon">💹</span>
+          <span className="ht-card-title">NISA満額まで</span>
+        </div>
+        <div className="ht-nisa-list">
+          <NisaBar
+            label="自分"
+            color="#34d399"
+            current={current.selfNisa || 0}
+            cap={NISA_CAP}
+            fullAge={selfFullAge}
+            currentAge={inputs.currentAge}
+          />
+          {(inputs.monthlyNisaSpouse > 0 || inputs.monthlyGrowthSpouse > 0) && (
+            <NisaBar
+              label="配偶者"
+              color="#a78bfa"
+              current={current.spouseNisa || 0}
+              cap={NISA_CAP}
+              fullAge={spouseFullAge}
+              currentAge={inputs.currentAge}
+            />
+          )}
+          {inputs.monthlyNisaChild > 0 && (
+            <NisaBar
+              label="子ども"
+              color="#fb923c"
+              current={current.childNisa || 0}
+              cap={NISA_CAP_CHILD}
+              fullAge={childFullAge}
+              currentAge={inputs.currentAge}
+            />
+          )}
+        </div>
+      </div>
 
       {/* ── 使い方ガイド ── */}
       <div className="ht-card ht-guide">

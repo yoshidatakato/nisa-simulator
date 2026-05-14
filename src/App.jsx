@@ -87,7 +87,13 @@ export default function App() {
         <main className="main-area panel-main">
           {/* モバイルホームタブ */}
           <div className="panel-home">
-            <HomeTab data={data} inputs={inputs} />
+            <HomeTab
+              data={data}
+              inputs={inputs}
+              selfFullAge={selfFullAge}
+              spouseFullAge={spouseFullAge}
+              childFullAge={childFullAge}
+            />
           </div>
 
           {/* グラフ */}

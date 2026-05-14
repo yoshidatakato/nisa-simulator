@@ -656,6 +656,42 @@ body {
   padding-top: 0.5rem;
 }
 
+/* NISA満額進捗 */
+.ht-nisa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.ht-nisa-row { display: flex; flex-direction: column; gap: 0.25rem; }
+.ht-nisa-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.ht-nisa-label { font-size: 0.78rem; font-weight: 700; }
+.ht-nisa-nums  { font-size: 0.78rem; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.ht-nisa-cap   { font-size: 0.68rem; font-weight: 400; color: var(--text-muted); }
+.ht-nisa-track {
+  height: 7px;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.ht-nisa-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  min-width: 3px;
+}
+.ht-nisa-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ht-nisa-pct    { font-size: 0.68rem; color: var(--text-muted); }
+.ht-nisa-full   { font-size: 0.7rem; font-weight: 700; }
+.ht-nisa-unfull { font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
+
 /* 使い方ガイド */
 .ht-steps {
   list-style: none;
