@@ -3,6 +3,7 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import InputPanel from './components/InputPanel';
 import AssetChart from './components/AssetChart';
 import AssetTable from './components/AssetTable';
+import HomeTab from './components/HomeTab';
 import { simulate } from './utils/simulation';
 
 const DEFAULT_INPUTS = {
@@ -73,21 +74,24 @@ export default function App() {
     window.addEventListener('touchend',  cleanup);
   };
 
-  // モバイルタブの表示制御（PCでは常に表示）
-  const hide = (tab) => `mobile-hide-${tab}`;
-
   return (
     <div className="app">
       <div className="app-layout" data-tab={mobileTab}>
-        {/* サイドバー：PC常時表示 / モバイルは「入力」タブのみ */}
-        <aside className={`sidebar ${hide('non-input')}`}>
+
+        {/* ── サイドバー（入力）── */}
+        <aside className="sidebar panel-input">
           <InputPanel inputs={inputs} set={set} />
         </aside>
 
-        {/* メインエリア：PC常時表示 / モバイルは「ホーム」「グラフ」「表」タブ */}
-        <main className={`main-area ${hide('input')}`}>
-          {/* グラフ：ホーム・グラフタブで表示 */}
-          <div className={hide('table')}>
+        {/* ── メインエリア ── */}
+        <main className="main-area panel-main">
+          {/* モバイルホームタブ */}
+          <div className="panel-home">
+            <HomeTab data={data} inputs={inputs} />
+          </div>
+
+          {/* グラフ */}
+          <div className="panel-chart">
             <AssetChart
               data={data}
               currentAge={inputs.currentAge}
@@ -105,8 +109,8 @@ export default function App() {
             />
           </div>
 
-          {/* 表：ホーム・表タブで表示 */}
-          <div className={hide('chart')}>
+          {/* 表 */}
+          <div className="panel-table">
             <AssetTable
               data={data}
               currentAge={inputs.currentAge}

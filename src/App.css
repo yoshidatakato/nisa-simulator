@@ -466,7 +466,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* タブバー表示 */
+  /* ── タブバー ── */
   .tab-nav {
     display: flex;
     position: fixed;
@@ -494,34 +494,195 @@ body {
     transition: color var(--transition);
     -webkit-tap-highlight-color: transparent;
   }
-  .tab-btn--active {
-    color: var(--accent-blue);
-  }
-  .tab-icon {
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-  .tab-label {
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
+  .tab-btn--active { color: var(--accent-blue); }
+  .tab-icon  { font-size: 1.25rem; line-height: 1; }
+  .tab-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.02em; }
 
   /* コンテンツがタブバーに隠れないよう余白 */
   .app { padding-bottom: 60px; }
 
-  /* タブ切り替えの表示制御 */
-  /* ホームタブ：グラフ＋表（サイドバー非表示） */
-  [data-tab="home"] .mobile-hide-non-input { display: none !important; }
+  /* ── モバイルパネル制御（デフォルト：ホームタブ） ── */
+  .panel-input { display: none !important; }  /* サイドバーはデフォルト非表示 */
+  .panel-home  { display: block; }
+  .panel-chart { display: none !important; }
+  .panel-table { display: none !important; }
 
-  /* 入力タブ：サイドバーのみ（メインエリア非表示） */
-  [data-tab="input"] .mobile-hide-input { display: none !important; }
+  /* 入力タブ */
+  [data-tab="input"] .panel-input { display: block !important; }
+  [data-tab="input"] .panel-main  { display: none !important; }
 
-  /* グラフタブ：グラフのみ（サイドバー・表非表示） */
-  [data-tab="chart"] .mobile-hide-non-input { display: none !important; }
-  [data-tab="chart"] .mobile-hide-table    { display: none !important; }
+  /* ホームタブ */
+  [data-tab="home"] .panel-home  { display: block !important; }
+  [data-tab="home"] .panel-chart { display: none !important; }
+  [data-tab="home"] .panel-table { display: none !important; }
 
-  /* 表タブ：表のみ（サイドバー・グラフ非表示） */
-  [data-tab="table"] .mobile-hide-non-input { display: none !important; }
-  [data-tab="table"] .mobile-hide-chart     { display: none !important; }
+  /* グラフタブ */
+  [data-tab="chart"] .panel-home  { display: none !important; }
+  [data-tab="chart"] .panel-chart { display: block !important; }
+  [data-tab="chart"] .panel-table { display: none !important; }
+
+  /* 表タブ */
+  [data-tab="table"] .panel-home  { display: none !important; }
+  [data-tab="table"] .panel-chart { display: none !important; }
+  [data-tab="table"] .panel-table { display: block !important; }
+}
+
+/* ── ホームタブ スタイル（モバイル専用） ── */
+.home-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.ht-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.1rem;
+}
+
+.ht-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.ht-card-icon  { font-size: 1.1rem; }
+.ht-card-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+
+.ht-total {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.ht-age-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  margin-bottom: 0.9rem;
+}
+
+.ht-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0.75rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+.ht-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.ht-item-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ht-item-value {
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* FIRE進捗 */
+.ht-fire-age-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+  border-radius: 4px;
+  padding: 0.1rem 0.45rem;
+}
+.ht-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+.ht-progress-bar {
+  flex: 1;
+  height: 10px;
+  background: var(--bg-elevated);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.ht-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #34d399, #60a5fa);
+  border-radius: 5px;
+  transition: width 0.4s ease;
+  min-width: 3px;
+}
+.ht-progress-pct {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-green);
+  min-width: 2.5rem;
+  text-align: right;
+}
+.ht-progress-nums {
+  display: flex;
+  justify-content: space-between;
+}
+.ht-pnum-label {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  margin-bottom: 0.1rem;
+}
+.ht-pnum-value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.ht-fire-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.6rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+}
+
+/* 使い方ガイド */
+.ht-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.ht-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.ht-step-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-top: 0.05rem;
 }
