@@ -221,7 +221,7 @@ export default function InputPanel({ inputs, set }) {
         onAmount={(v) => set('cashSavings', v)}
       />
       <AssetRow
-        label="NISA残高" note="利回り" placeholder="例：50"
+        label="NISA累計積立額" note="利回り" placeholder="例：50"
         amount={inputs.nisaBalance}
         onAmount={(v) => set('nisaBalance', v)}
         rate={inputs.nisaRate}
@@ -319,6 +319,27 @@ export default function InputPanel({ inputs, set }) {
         value={inputs.monthlyExpenses}
         onChange={(v) => set('monthlyExpenses', v)}
         min={0} step={0.5}
+      />
+
+      {/* ===== 年金 ===== */}
+      <SectionTitle>年金</SectionTitle>
+      <NumInput
+        label="受給開始年齢" unit="歳" placeholder="65"
+        value={inputs.pensionStartAge}
+        onChange={(v) => set('pensionStartAge', Math.max(60, Math.min(89, v || 65)))}
+        min={60} max={89}
+      />
+      <NumInput
+        label="自分の年金" unit="万円/月" placeholder="例：15"
+        value={inputs.pensionSelf}
+        onChange={(v) => set('pensionSelf', Math.max(0, v || 0))}
+        min={0} step={0.1}
+      />
+      <NumInput
+        label="配偶者の年金" unit="万円/月" placeholder="例：10"
+        value={inputs.pensionSpouse}
+        onChange={(v) => set('pensionSpouse', Math.max(0, v || 0))}
+        min={0} step={0.1}
       />
 
       <div className={`inp-balance ${monthlyLeft < 0 ? 'inp-balance--neg' : ''}`}>

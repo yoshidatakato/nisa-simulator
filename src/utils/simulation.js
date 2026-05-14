@@ -52,6 +52,9 @@ export function simulate(inputs) {
     growthSpouseRate      = 0.05,
     monthlyIncome         = 0,
     monthlyExpenses       = 0,
+    pensionSelf           = 0,   // 自分の年金月額
+    pensionSpouse         = 0,   // 配偶者の年金月額
+    pensionStartAge       = 65,  // 受給開始年齢（自分の年齢基準）
     sideFireIncome        = 0,   // サイドFIRE収入（月額）
   } = inputs;
 
@@ -96,6 +99,9 @@ export function simulate(inputs) {
       const yearAge  = age0 + t;
       const isFire   = fireAge > 0 && yearAge >= fireAge;
       const monthlyNet = isFire ? monthlyNetFire : monthlyNetWork;
+      const monthlyPension = (pensionStartAge > 0 && yearAge >= pensionStartAge)
+        ? (pensionSelf || 0) + (pensionSpouse || 0)
+        : 0;
 
       for (let m = 0; m < 12; m++) {
         // 複利運用
@@ -106,7 +112,7 @@ export function simulate(inputs) {
         spsGrowthAcc  *= (1 + mrGrowthSps);
         childNisaAcc  *= (1 + mrNisaChild);
         invest        *= (1 + mrInvest);
-        cash += monthlyNet;
+        cash += monthlyNet + monthlyPension;
 
         // 自分のNISA拠出（積立枠 + 成長投資枠）満額まで継続
         if (selfContrib < NISA_CAP) {

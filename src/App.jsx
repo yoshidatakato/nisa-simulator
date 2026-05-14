@@ -26,6 +26,9 @@ const DEFAULT_INPUTS = {
   growthSpouseRate:   0.05,
   monthlyIncome:        0,
   monthlyExpenses:      0,
+  pensionSelf:          0,   // 自分の年金月額
+  pensionSpouse:        0,   // 配偶者の年金月額
+  pensionStartAge:     65,   // 受給開始年齢
   fireAge:              0,   // 取り崩し開始年齢（0=無効）
   sideFireIncome:       0,   // サイドFIRE収入・月額（0=完全FIRE）
 };
