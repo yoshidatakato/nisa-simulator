@@ -76,7 +76,7 @@ function RefLabel({ viewBox, text, color, yOffset = 0 }) {
   );
 }
 
-export default function AssetChart({ data, currentAge, spouseAge, fireAge, selfFullAge, spouseFullAge, childFullAge, chartHeight = 400 }) {
+export default function AssetChart({ data, currentAge, spouseAge, fireAge, selfFullAge, spouseFullAge, childFullAge, chartHeight = 400, highlightAge = null }) {
   if (!data?.length) return null;
 
   // 配偶者の実年齢に変換（spouseAge が設定されている場合）
@@ -195,6 +195,15 @@ export default function AssetChart({ data, currentAge, spouseAge, fireAge, selfF
               strokeDasharray="4 3"
               strokeWidth={1.5}
               label={<RefLabel text="子ども満額" color="#fb923c" yOffset={80} />}
+            />
+          )}
+
+          {/* スライダー選択年齢ライン（モバイル用） */}
+          {highlightAge != null && highlightAge !== currentAge && (
+            <ReferenceLine
+              x={highlightAge}
+              stroke="#ffffff55"
+              strokeWidth={2}
             />
           )}
 

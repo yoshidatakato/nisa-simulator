@@ -37,6 +37,8 @@ export function simulate(inputs) {
     cashSavings           = 0,
     nisaBalance           = 0,
     nisaRate              = 0.05,
+    nisaSpouseBalance     = 0,
+    nisaSpouseBalRate     = 0.05,
     investBalance         = 0,
     investRate            = 0.05,
     otherAssets           = 0,
@@ -66,7 +68,8 @@ export function simulate(inputs) {
   let nisaBase      = nisaBalance   || 0;
   let selfNisaAcc   = 0;
   let selfGrowthAcc = 0;
-  let spsNisaAcc    = 0;
+  let spsNisaBase   = nisaSpouseBalance || 0; // 配偶者の初期NISA残高
+  let spsNisaAcc    = 0;                      // 配偶者の月次積立累計
   let spsGrowthAcc  = 0;
   let childNisaAcc  = 0;
   let invest        = investBalance || 0;
@@ -81,9 +84,10 @@ export function simulate(inputs) {
   let childFullAge  = null;
 
   // ── 月次利回り ──
-  const mrNisa      = (nisaRate         || 0) / 12;
-  const mrNisaSelf  = (nisaSelfRate     || 0) / 12;
-  const mrNisaSps   = (nisaSpouseRate   || 0) / 12;
+  const mrNisa         = (nisaRate            || 0) / 12;
+  const mrNisaSelf     = (nisaSelfRate        || 0) / 12;
+  const mrNisaSpsBal   = (nisaSpouseBalRate   || 0) / 12; // 配偶者NISA残高の利回り
+  const mrNisaSps      = (nisaSpouseRate      || 0) / 12; // 配偶者NISA積立の利回り
   const mrNisaChild = (nisaChildRate    || 0) / 12;
   const mrGrowth    = (growthRate       || 0) / 12;
   const mrGrowthSps = (growthSpouseRate || 0) / 12;
@@ -108,6 +112,7 @@ export function simulate(inputs) {
         nisaBase      *= (1 + mrNisa);
         selfNisaAcc   *= (1 + mrNisaSelf);
         selfGrowthAcc *= (1 + mrGrowth);
+        spsNisaBase   *= (1 + mrNisaSpsBal);
         spsNisaAcc    *= (1 + mrNisaSps);
         spsGrowthAcc  *= (1 + mrGrowthSps);
         childNisaAcc  *= (1 + mrNisaChild);
@@ -163,14 +168,14 @@ export function simulate(inputs) {
 
       // ── 4%取り崩し（年末に適用）──
       // 対象：現金・その他以外の全運用資産（NISA + 成長投資枠 + 運用資産）
-      const totalInvested = nisaBase + selfNisaAcc + selfGrowthAcc + spsNisaAcc + spsGrowthAcc + childNisaAcc + invest;
+      const totalInvested = nisaBase + selfNisaAcc + selfGrowthAcc + spsNisaBase + spsNisaAcc + spsGrowthAcc + childNisaAcc + invest;
       if (isFire && totalInvested > 0) {
         const withdrawal = totalInvested * 0.04;
-        // 各バケットから比率按分で取り崩す
         const ratio = withdrawal / totalInvested;
         nisaBase      *= (1 - ratio);
         selfNisaAcc   *= (1 - ratio);
         selfGrowthAcc *= (1 - ratio);
+        spsNisaBase   *= (1 - ratio);
         spsNisaAcc    *= (1 - ratio);
         spsGrowthAcc  *= (1 - ratio);
         childNisaAcc  *= (1 - ratio);
@@ -185,17 +190,18 @@ export function simulate(inputs) {
     const rNisaBase   = Math.round(nisaBase);
     const rSelfNisa   = Math.round(selfNisaAcc);
     const rSelfGrowth = Math.round(selfGrowthAcc);
+    const rSpsNisaBase = Math.round(spsNisaBase);
     const rSpsNisa    = Math.round(spsNisaAcc);
     const rSpsGrowth  = Math.round(spsGrowthAcc);
     const rChild      = Math.round(childNisaAcc);
     const rInvest     = Math.round(invest);
 
-    const nisaTot = rNisaBase + rSelfNisa + rSelfGrowth + rSpsNisa + rSpsGrowth + rChild;
+    const nisaTot = rNisaBase + rSelfNisa + rSelfGrowth + rSpsNisaBase + rSpsNisa + rSpsGrowth + rChild;
 
     data.push({
       age:    age0 + t,
       cash:   rCash,
-      nisa:   rNisaBase + rSelfNisa + rSpsNisa + rChild,
+      nisa:   rNisaBase + rSelfNisa + rSpsNisaBase + rSpsNisa + rChild,
       growth: rSelfGrowth + rSpsGrowth,
       invest: rInvest,
       other,
@@ -203,7 +209,7 @@ export function simulate(inputs) {
       // ツールチップ用（個別内訳）
       selfNisa:    rNisaBase + rSelfNisa,
       selfGrowth:  rSelfGrowth,
-      spouseNisa:  rSpsNisa,
+      spouseNisa:  rSpsNisaBase + rSpsNisa,
       spouseGrowth:rSpsGrowth,
       childNisa:   rChild,
       // グラフ用

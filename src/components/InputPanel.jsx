@@ -228,6 +228,13 @@ export default function InputPanel({ inputs, set }) {
         onRate={(v) => set('nisaRate', v)}
       />
       <AssetRow
+        label="配偶者のNISA累計積立額" note="利回り" placeholder="例：50"
+        amount={inputs.nisaSpouseBalance}
+        onAmount={(v) => set('nisaSpouseBalance', v)}
+        rate={inputs.nisaSpouseBalRate}
+        onRate={(v) => set('nisaSpouseBalRate', v)}
+      />
+      <AssetRow
         label="運用資産・株式など" note="利回り" placeholder="例：200"
         amount={inputs.investBalance}
         onAmount={(v) => set('investBalance', v)}

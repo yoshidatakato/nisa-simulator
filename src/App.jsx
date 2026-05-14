@@ -4,6 +4,7 @@ import InputPanel from './components/InputPanel';
 import AssetChart from './components/AssetChart';
 import AssetTable from './components/AssetTable';
 import HomeTab from './components/HomeTab';
+import MobileChartPanel from './components/MobileChartPanel';
 import { simulate } from './utils/simulation';
 
 const DEFAULT_INPUTS = {
@@ -12,6 +13,8 @@ const DEFAULT_INPUTS = {
   cashSavings:          0,
   nisaBalance:          0,
   nisaRate:           0.05,
+  nisaSpouseBalance:    0,
+  nisaSpouseBalRate:  0.05,
   investBalance:        0,
   investRate:         0.05,
   otherAssets:          0,
@@ -96,23 +99,36 @@ export default function App() {
             />
           </div>
 
-          {/* グラフ */}
+          {/* グラフ（PC: リサイズ可能なAssetChart / モバイル: MobileChartPanel） */}
           <div className="panel-chart">
-            <AssetChart
-              data={data}
-              currentAge={inputs.currentAge}
-              spouseAge={inputs.spouseAge}
-              fireAge={inputs.fireAge}
-              selfFullAge={selfFullAge}
-              spouseFullAge={spouseFullAge}
-              childFullAge={childFullAge}
-              chartHeight={chartHeight}
-            />
-            <div
-              className="resize-divider"
-              onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
-              onTouchStart={(e) => startDrag(e.touches[0].clientY)}
-            />
+            {/* PC用 */}
+            <div className="panel-chart-pc">
+              <AssetChart
+                data={data}
+                currentAge={inputs.currentAge}
+                spouseAge={inputs.spouseAge}
+                fireAge={inputs.fireAge}
+                selfFullAge={selfFullAge}
+                spouseFullAge={spouseFullAge}
+                childFullAge={childFullAge}
+                chartHeight={chartHeight}
+              />
+              <div
+                className="resize-divider"
+                onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
+                onTouchStart={(e) => startDrag(e.touches[0].clientY)}
+              />
+            </div>
+            {/* モバイル用 */}
+            <div className="panel-chart-mobile">
+              <MobileChartPanel
+                data={data}
+                inputs={inputs}
+                selfFullAge={selfFullAge}
+                spouseFullAge={spouseFullAge}
+                childFullAge={childFullAge}
+              />
+            </div>
           </div>
 
           {/* 表 */}
