@@ -1,0 +1,19 @@
+{
+  "name": "ライフプラン資産シミュレーター",
+  "short_name": "資産シミュレーター",
+  "description": "NISAやFIREを含むライフプラン資産シミュレーションアプリ",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
