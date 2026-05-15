@@ -4,7 +4,6 @@ import InputPanel from './components/InputPanel';
 import AssetChart from './components/AssetChart';
 import AssetTable from './components/AssetTable';
 import HomeTab from './components/HomeTab';
-import MobileChartPanel from './components/MobileChartPanel';
 import { simulate } from './utils/simulation';
 
 const DEFAULT_INPUTS = {
@@ -91,6 +90,12 @@ export default function App() {
   const [chartHeight, setChartHeight] = useState(DEFAULT_CHART_H);
   const [mobileTab, setMobileTab] = useState('home');
 
+  // モバイルのグラフ高さ：ビューポートからタブバーと凡例ヘッダー分を引く
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  const mobileChartHeight = isMobile
+    ? Math.max(300, window.innerHeight - 130)
+    : chartHeight;
+
   const startDrag = (clientY) => {
     const startY = clientY;
     const startH = chartHeight;
@@ -131,36 +136,23 @@ export default function App() {
             />
           </div>
 
-          {/* グラフ（PC: リサイズ可能なAssetChart / モバイル: MobileChartPanel） */}
+          {/* グラフ */}
           <div className="panel-chart">
-            {/* PC用 */}
-            <div className="panel-chart-pc">
-              <AssetChart
-                data={data}
-                currentAge={inputs.currentAge}
-                spouseAge={inputs.spouseAge}
-                fireAge={inputs.fireAge}
-                selfFullAge={selfFullAge}
-                spouseFullAge={spouseFullAge}
-                childFullAge={childFullAge}
-                chartHeight={chartHeight}
-              />
-              <div
-                className="resize-divider"
-                onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
-                onTouchStart={(e) => startDrag(e.touches[0].clientY)}
-              />
-            </div>
-            {/* モバイル用 */}
-            <div className="panel-chart-mobile">
-              <MobileChartPanel
-                data={data}
-                inputs={inputs}
-                selfFullAge={selfFullAge}
-                spouseFullAge={spouseFullAge}
-                childFullAge={childFullAge}
-              />
-            </div>
+            <AssetChart
+              data={data}
+              currentAge={inputs.currentAge}
+              spouseAge={inputs.spouseAge}
+              fireAge={inputs.fireAge}
+              selfFullAge={selfFullAge}
+              spouseFullAge={spouseFullAge}
+              childFullAge={childFullAge}
+              chartHeight={mobileChartHeight}
+            />
+            <div
+              className="resize-divider"
+              onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
+              onTouchStart={(e) => startDrag(e.touches[0].clientY)}
+            />
           </div>
 
           {/* 表 */}

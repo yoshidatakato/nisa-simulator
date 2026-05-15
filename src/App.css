@@ -300,8 +300,7 @@ body {
 
 .table-scroll {
   overflow-x: auto;
-  overflow-y: auto;
-  max-height: 420px;
+  overflow-y: visible;
   scrollbar-width: thin;
   scrollbar-color: #334155 transparent;
 }
@@ -316,12 +315,10 @@ body {
 }
 
 /* ヘッダー */
-.asset-table thead tr {
+.asset-table th {
   position: sticky;
   top: 0;
   z-index: 2;
-}
-.asset-table th {
   background: #111c2e;
   color: var(--text-muted);
   font-size: 0.72rem;
@@ -334,6 +331,37 @@ body {
 }
 .asset-table th:first-child,
 .asset-table th:nth-child(2) { text-align: left; }
+
+/* 西暦・年齢列を横スクロール時に固定 */
+.asset-table th:first-child,
+.asset-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: #111c2e;
+}
+.asset-table th:nth-child(2),
+.asset-table td:nth-child(2) {
+  position: sticky;
+  left: 56px; /* 西暦列の幅 */
+  z-index: 3;
+  background: #111c2e;
+}
+/* 偶数行の固定列背景 */
+.asset-table tbody tr:nth-child(even) td:first-child,
+.asset-table tbody tr:nth-child(even) td:nth-child(2) {
+  background: #16253a;
+}
+/* 現在行の固定列背景 */
+.trow--current td:first-child,
+.trow--current td:nth-child(2) {
+  background: #12243e !important;
+}
+/* 右端に薄い区切り線 */
+.asset-table td:nth-child(2),
+.asset-table th:nth-child(2) {
+  border-right: 1px solid var(--border);
+}
 
 /* セル */
 .asset-table td {
@@ -446,8 +474,6 @@ body {
   width: 64px;
 }
 
-/* ===== PC用：モバイル専用パネルは非表示 ===== */
-.panel-chart-mobile { display: none; }
 
 /* ===== モバイルタブナビゲーション ===== */
 .tab-nav {
@@ -469,9 +495,21 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* モバイルでPC用を隠す */
-  .panel-chart-pc     { display: none !important; }
-  .panel-chart-mobile { display: block !important; }
+  /* グラフタブをフルスクリーン表示 */
+  [data-tab="chart"] .panel-chart .chart-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    padding: 0.5rem 0.25rem 0;
+    height: calc(100vh - 130px); /* タブバー＋余白を除いた高さ */
+    display: flex;
+    flex-direction: column;
+  }
+  [data-tab="chart"] .panel-chart .chart-header {
+    padding: 0 0.5rem;
+  }
+  [data-tab="chart"] .resize-divider { display: none; }
 
   /* ── タブバー（リデザイン） ── */
   .tab-nav {

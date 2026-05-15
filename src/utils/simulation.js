@@ -161,14 +161,12 @@ export function simulate(inputs) {
           }
         }
 
-        // 現金がマイナスなら運用資産（invest）から補填
-        if (cash < 0) {
-          const deficit = -cash;
-          const draw = Math.min(deficit, invest);
+        // 現金がマイナスかつ運用資産がある場合は補填
+        // 運用資産が0なら現金はマイナス表記のまま
+        if (cash < 0 && invest > 0) {
+          const draw = Math.min(-cash, invest);
           invest -= draw;
           cash   += draw;
-          // 運用資産も枯渇したら0で止める
-          if (cash < 0) cash = 0;
         }
       }
 

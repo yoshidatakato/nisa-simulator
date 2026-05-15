@@ -173,10 +173,11 @@ function Subtotal({ label, value, suffix = '円', color }) {
 
 export default function InputPanel({ inputs, set }) {
   const totalAssets =
-    (inputs.cashSavings    || 0) +
-    (inputs.nisaBalance    || 0) +
-    (inputs.investBalance  || 0) +
-    (inputs.otherAssets    || 0);
+    (inputs.cashSavings       || 0) +
+    (inputs.nisaBalance       || 0) +
+    (inputs.nisaSpouseBalance || 0) +
+    (inputs.investBalance     || 0) +
+    (inputs.otherAssets       || 0);
 
   const monthlyContribs =
     (inputs.monthlyNisaSelf      || 0) +
