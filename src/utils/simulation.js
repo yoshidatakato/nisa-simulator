@@ -160,6 +160,16 @@ export function simulate(inputs) {
             cash         -= add;
           }
         }
+
+        // 現金がマイナスなら運用資産（invest）から補填
+        if (cash < 0) {
+          const deficit = -cash;
+          const draw = Math.min(deficit, invest);
+          invest -= draw;
+          cash   += draw;
+          // 運用資産も枯渇したら0で止める
+          if (cash < 0) cash = 0;
+        }
       }
 
       if (selfFullAge   === null && selfContrib  >= NISA_CAP)       selfFullAge   = age0 + t;
