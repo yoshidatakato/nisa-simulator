@@ -4,6 +4,7 @@ import InputPanel from './components/InputPanel';
 import AssetChart from './components/AssetChart';
 import AssetTable from './components/AssetTable';
 import HomeTab from './components/HomeTab';
+import MobileChartPanel from './components/MobileChartPanel';
 import { simulate } from './utils/simulation';
 
 const DEFAULT_INPUTS = {
@@ -138,21 +139,33 @@ export default function App() {
 
           {/* グラフ */}
           <div className="panel-chart">
-            <AssetChart
-              data={data}
-              currentAge={inputs.currentAge}
-              spouseAge={inputs.spouseAge}
-              fireAge={inputs.fireAge}
-              selfFullAge={selfFullAge}
-              spouseFullAge={spouseFullAge}
-              childFullAge={childFullAge}
-              chartHeight={mobileChartHeight}
-            />
-            <div
-              className="resize-divider"
-              onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
-              onTouchStart={(e) => startDrag(e.touches[0].clientY)}
-            />
+            {isMobile ? (
+              <MobileChartPanel
+                data={data}
+                inputs={inputs}
+                selfFullAge={selfFullAge}
+                spouseFullAge={spouseFullAge}
+                childFullAge={childFullAge}
+              />
+            ) : (
+              <>
+                <AssetChart
+                  data={data}
+                  currentAge={inputs.currentAge}
+                  spouseAge={inputs.spouseAge}
+                  fireAge={inputs.fireAge}
+                  selfFullAge={selfFullAge}
+                  spouseFullAge={spouseFullAge}
+                  childFullAge={childFullAge}
+                  chartHeight={chartHeight}
+                />
+                <div
+                  className="resize-divider"
+                  onMouseDown={(e) => { e.preventDefault(); startDrag(e.clientY); }}
+                  onTouchStart={(e) => startDrag(e.touches[0].clientY)}
+                />
+              </>
+            )}
           </div>
 
           {/* 表 */}

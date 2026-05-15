@@ -5,13 +5,14 @@ import { formatMan } from '../utils/simulation';
 const THIS_YEAR = new Date().getFullYear();
 
 const ITEMS = [
-  { key: 'cash',        label: '現金',      color: '#94a3b8' },
-  { key: 'selfNisa',    label: '自分NISA',  color: '#34d399' },
-  { key: 'spouseNisa',  label: '配偶者NISA',color: '#a78bfa' },
-  { key: 'childNisa',   label: '子NISA',    color: '#fb923c' },
-  { key: 'growth',      label: '成長投資枠', color: '#2dd4bf' },
-  { key: 'invest',      label: '運用資産',  color: '#f59e0b' },
-  { key: 'other',       label: 'その他',    color: '#60a5fa' },
+  { key: 'cash',        label: '現金',       color: '#94a3b8' },
+  { key: 'selfNisa',    label: '自分NISA',   color: '#34d399' },
+  { key: 'selfGrowth',  label: '自分成長枠', color: '#2dd4bf' },
+  { key: 'spouseNisa',  label: '配偶者NISA', color: '#a78bfa' },
+  { key: 'spouseGrowth',label: '配偶者成長枠',color: '#c4b5fd' },
+  { key: 'childNisa',   label: '子NISA',     color: '#fb923c' },
+  { key: 'invest',      label: '運用資産',   color: '#f59e0b' },
+  { key: 'other',       label: 'その他',     color: '#60a5fa' },
 ];
 
 export default function MobileChartPanel({
@@ -23,6 +24,9 @@ export default function MobileChartPanel({
   const [selectedAge, setSelectedAge] = useState(inputs.currentAge);
   const row = data?.find((r) => r.age === selectedAge) ?? data?.[0] ?? {};
   const year = THIS_YEAR + (selectedAge - inputs.currentAge);
+
+  // グラフ高さ：画面の約38%
+  const chartH = Math.max(180, Math.round(window.innerHeight * 0.38));
 
   return (
     <div className="mcp-wrap">
@@ -36,7 +40,7 @@ export default function MobileChartPanel({
           selfFullAge={selfFullAge}
           spouseFullAge={spouseFullAge}
           childFullAge={childFullAge}
-          chartHeight={220}
+          chartHeight={chartH}
           highlightAge={selectedAge}
         />
       </div>
@@ -44,7 +48,8 @@ export default function MobileChartPanel({
       {/* ── 資産内訳 ── */}
       <div className="mcp-breakdown">
         <div className="mcp-bd-header">
-          <div className="mcp-bd-age">{selectedAge}歳
+          <div className="mcp-bd-age">
+            {selectedAge}歳
             <span className="mcp-bd-year">（{year}年）</span>
           </div>
           <div className="mcp-bd-total">{formatMan(row.total)}円</div>
