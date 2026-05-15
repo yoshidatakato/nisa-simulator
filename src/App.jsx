@@ -90,10 +90,10 @@ export default function App() {
   const [chartHeight, setChartHeight] = useState(DEFAULT_CHART_H);
   const [mobileTab, setMobileTab] = useState('home');
 
-  // モバイルのグラフ高さ：ビューポートからタブバーと凡例ヘッダー分を引く
+  // モバイルのグラフ高さ：ビューポートからタブバー(62px)とチャートヘッダー(78px)分を引く
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const mobileChartHeight = isMobile
-    ? Math.max(300, window.innerHeight - 130)
+    ? Math.max(300, window.innerHeight - 62 - 78)
     : chartHeight;
 
   const startDrag = (clientY) => {
